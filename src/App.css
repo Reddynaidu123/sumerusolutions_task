@@ -1,0 +1,16 @@
+.Apps {
+  text-align: center;
+  border: "1px solid black";
+}
+.Apps_text{
+  text-align: center;
+  font-size: 30px;
+}
+.input_css{
+  margin-bottom: 10px;
+  height: 30px;
+  width: 25%;
+}
+
+
+
