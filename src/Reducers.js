@@ -5,7 +5,6 @@ const postreducer=(state={},action)=>{
                 ...state,
                 posts:action.data
             }
-           
             default:
                 return state;
     }
