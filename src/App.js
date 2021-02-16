@@ -25,7 +25,7 @@ function App(props) {
         setFlag(false)
         const lowerCaseFilter = e.target.value.toLowerCase();
         let filterData = state.filter((program) => {
-            return program.project_code.toLowerCase().includes(lowerCaseFilter)
+            return program.status.toLowerCase().includes(lowerCaseFilter)
         })
         setfilterstate(filterData)
     }
@@ -35,7 +35,7 @@ function App(props) {
         <div className="App">
             <h1 className="Apps_text">Hello KaayLabs</h1>
             <div className="Apps_text">
-                Search here to Filter Data from table :  <input placeholder="Enter the project_code to filter data from table............." className="input_css" onChange={(e) => handleChange(e)} />
+                Search here to Filter Data from table :  <input placeholder="Enter the status to filter data from table............." className="input_css" onChange={(e) => handleChange(e)} />
             </div>
             <table style={{ width: "100%" }} >
 
