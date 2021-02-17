@@ -2,65 +2,90 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { getposts } from './Actions.js'
 import './App.css'
+let data_array=["All","Completed","In Progress"]
 function App(props) {
     const [state, setsState] = useState([]);
     const [filterstate, setfilterstate] = useState([]);
     const [flag, setFlag] = useState(true);
+    const [statusSelected, setstatusSelected] = useState("Select Status");
 
-    useEffect(async () => {
-        await props.getposts();
-    }, []);
-    if (flag) {
-        setTimeout(
-            () => settingvalues(),
-            500
-        );
-    }
+    useEffect(() => {
+        if (flag) {
+            props.getposts();
+            settingvalues();
+        }
+    }, [props.Reducers.posts])
+
     const settingvalues = () => {
         let values = props.Reducers.posts;
         setsState(values);
         setfilterstate(values);
     }
-    const handleChange = (e) => {
+    const handleChange = (e, data) => {
+        let values=state;
         setFlag(false)
-        const lowerCaseFilter = e.target.value.toLowerCase();
+        setstatusSelected(data);
+        const lowerCaseFilter = data.toLowerCase();
         let filterData = state.filter((program) => {
             return program.status.toLowerCase().includes(lowerCaseFilter)
         })
-        setfilterstate(filterData)
+        if(data!=="All"){
+            setfilterstate(filterData) 
+        }else{
+            setfilterstate(values)
+        }
     }
     var datalength = filterstate !== undefined ? filterstate.length : 0;
 
     return (
         <div className="App">
-            <h1 className="Apps_text">Hello KaayLabs</h1>
-            <div className="Apps_text">
-                Search here to Filter Data from table :  <input placeholder="Enter the status to filter data from table............." className="input_css" onChange={(e) => handleChange(e)} />
-            </div>
-            <table style={{ width: "100%" }} >
+            <h1 className="Apps_tex mt-3 mb-2 text-center">Hello KaayLabs</h1>
 
+            <div className="row pb-5">
+                <div className="col-3"></div>
+                <div className="col-6 d-flex">
+                    <p className="Apps_text">
+                        Select here to Filter Data from table :
+            </p>
+                    <div class="dropdown ml-3 pt-2">
+                        <button type="button" class="bg-transparent dropdown-toggle" data-toggle="dropdown">
+                            {statusSelected}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            {data_array.map((item)=>{
+                                return(
+                                    <li className="ml-4" onClick={(e) => handleChange(e, item)}><p className="mb-0">{item}</p></li>
+                                )
+                            })}
+                         
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <table className="w-100" >
                 <tr>
-                    <th style={{ border: "1px solid black" ,fontSize:"20px"}}>S/NO</th>
-                    <th style={{ border: "1px solid black" ,fontSize:"20px" }}>project_id</th>
-                    <th style={{ border: "1px solid black" ,fontSize:"20px" }}>project_code</th>
-                    <th style={{ border: "1px solid black" ,fontSize:"20px" }}>description</th>
-                    <th style={{ border: "1px solid black" ,fontSize:"20px" }}>start_date</th>
-                    <th style={{ border: "1px solid black" ,fontSize:"20px" }}>end_date</th>
-                    <th style={{ border: "1px solid black" ,fontSize:"20px" }}>company_name</th>
-                    <th style={{ border: "1px solid black" ,fontSize:"20px" }}>status</th>
+                    <th className="Apps">S/NO</th>
+                    <th className="Apps">project_id</th>
+                    <th className="Apps">project_code</th>
+                    <th className="Apps">description</th>
+                    <th className="Apps">start_date</th>
+                    <th className="Apps">end_date</th>
+                    <th className="Apps">company_name</th>
+                    <th className="Apps">status</th>
                 </tr>
                 {datalength > 0 ?
                     filterstate.map((item, index) => {
                         return (
-                            <tr  className="Apps">
-                                <td  style={{ border: "1px solid black" }}>{index + 1}</td>
-                                <td style={{ border: "1px solid black" }} >{item.project_id}</td>
-                                <td style={{ border: "1px solid black" }} >{item.project_code}</td>
-                                <td style={{ border: "1px solid black" }} >{item.description}</td>
-                                <td style={{ border: "1px solid black" }} >{item.start_date}</td>
-                                <td style={{ border: "1px solid black" }} >{item.end_date}</td>
-                                <td style={{ border: "1px solid black" }} >{item.company_name}</td>
-                                <td style={{ border: "1px solid black" }} >{item.status}</td>
+                            <tr  >
+                                <td className="Apps">{index + 1}</td>
+                                <td className="Apps">{item.project_id}</td>
+                                <td className="Apps">{item.project_code}</td>
+                                <td className="Apps">{item.description}</td>
+                                <td className="Apps">{item.start_date}</td>
+                                <td className="Apps">{item.end_date}</td>
+                                <td className="Apps">{item.company_name}</td>
+                                <td className="Apps">{item.status}</td>
                             </tr>
                         )
                     }) : <></>}
@@ -68,8 +93,6 @@ function App(props) {
         </div>
     );
 }
-
-
 
 const mapStateToProps = ({ Reducers }) => {
     return {

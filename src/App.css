@@ -1,6 +1,8 @@
 .Apps {
   text-align: center;
-  border: "1px solid black";
+  border: 1px solid black;
+  font-size: 18px;
+
 }
 .Apps_text{
   text-align: center;
