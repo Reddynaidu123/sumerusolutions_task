@@ -41,7 +41,7 @@ function App(props) {
         <div className="App">
             <h1 className="Apps_tex mt-3 mb-2 text-center">Hello KaayLabs</h1>
 
-            <div className="row pb-5">
+            <div className="row pb-5 mr-0">
                 <div className="col-3"></div>
                 <div className="col-6 d-flex">
                     <p className="Apps_text">
