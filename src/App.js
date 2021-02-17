@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux'
 import { getposts } from './Actions.js'
 import './App.css'
-let data_array=["All","Completed","In Progress"]
+let data_array=["All","Completed","In Progress"];
 function App(props) {
     const [state, setsState] = useState([]);
     const [filterstate, setfilterstate] = useState([]);
@@ -11,7 +11,7 @@ function App(props) {
 
     useEffect(() => {
         if (flag) {
-            props.getposts();
+          props.getposts();
             settingvalues();
         }
     }, [props.Reducers.posts])
@@ -23,7 +23,7 @@ function App(props) {
     }
     const handleChange = (e, data) => {
         let values=state;
-        setFlag(false)
+        setFlag(false);
         setstatusSelected(data);
         const lowerCaseFilter = data.toLowerCase();
         let filterData = state.filter((program) => {
@@ -58,7 +58,6 @@ function App(props) {
                                     <li className="ml-4" onClick={(e) => handleChange(e, item)}><p className="mb-0">{item}</p></li>
                                 )
                             })}
-                         
                         </ul>
                     </div>
                 </div>
