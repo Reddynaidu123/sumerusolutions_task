@@ -1,99 +1,88 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { getposts } from './Actions.js'
 import './App.css'
-let data_array=["All","Completed","In Progress"];
-function App(props) {
-    const [state, setsState] = useState([]);
-    const [filterstate, setfilterstate] = useState([]);
-    const [flag, setFlag] = useState(true);
-    const [statusSelected, setstatusSelected] = useState("Select Status");
 
-    useEffect(() => {
-        if (flag) {
-          props.getposts();
-            settingvalues();
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data_array: [],
+            splice_araay:[]
         }
-    }, [props.Reducers.posts])
 
-    const settingvalues = () => {
-        let values = props.Reducers.posts;
-        setsState(values);
-        setfilterstate(values);
     }
-    const handleChange = (e, data) => {
-        let values=state;
-        setFlag(false);
-        setstatusSelected(data);
-        const lowerCaseFilter = data.toLowerCase();
-        let filterData = state.filter((program) => {
-            return program.status.toLowerCase().includes(lowerCaseFilter)
+    componentDidMount() {
+        console.log("props",this.props.Reducers.Reducers)
+        this.setState((prev) => {
+            let st = prev;
+            st.data_array=this.props.Reducers.Reducers.user_data;
+            return st;
+        },()=>{});
+    }
+    handleClick=(value,item)=>{
+        // this.props.history.push("/")
+        if(value==="edit"){
+            this.handleDelete();
+        }
+        this.props.history.push({
+            pathname : '/',
+            state :{
+                item : item,
+                value : value,
+            }
         })
-        if(data!=="All"){
-            setfilterstate(filterData) 
-        }else{
-            setfilterstate(values)
-        }
     }
-    var datalength = filterstate !== undefined ? filterstate.length : 0;
+    handleDelete=(e,index)=>{
+        let array=this.state.data_array;
+         setTimeout(array.splice(index,1), 1000);
+        
+        this.setState((prev) => {
+            let st = prev;
+            st.data_array=array;
+            return st;
+        },()=>{
 
-    return (
-        <div className="App">
-            <h1 className="Apps_tex mt-3 mb-2 text-center">Hello KaayLabs</h1>
+        });
+    }
+    render() {
+        var Addresslen = Object.keys(this.props.Reducers.Reducers.user_data).length;
+        return (
+            <div className="App pl-5 pr-5 pt-5 ml-5 mr-5 mt-5">
+                <table className="w-100" >
+                    <tr>
+                        <th className="Apps">S/NO</th>
+                        <th className="Apps">Email</th>
+                        <th className="Apps">Password</th>
+                        <th className="Apps">CellNumber</th>
+                        <th className="Apps">Edit</th>
+                        <th className="Apps">Delete</th>
+                    </tr>
+                    {Addresslen > 0 ?
+                        this.state.data_array.map((item,index) => {
+                            return (
+                                <tr  >
+                                    <td className="Apps">{index + 1}</td>
+                                    <td className="Apps">{item.email}</td>
+                                    <td className="Apps">{item.password}</td>
+                                    <td className="Apps">{item.cellNumber}</td>
+                                    <td className="Apps"><p  className="mb-0 cursor_pointer font_colourrr" onClick={(e)=>this.handleClick("edit",item)}>EDIT</p></td>
+                                    <td className="Apps">< p className="mb-0 cursor_pointer font_colourrr" onClick={(e)=>this.handleDelete(e,index)}>DELETE</p></td>
+                                </tr>
+                            )
+                        }) : <></>
+                    }
 
-            <div className="row pb-5 mr-0">
-                <div className="col-3"></div>
-                <div className="col-6 d-flex">
-                    <p className="Apps_text">
-                        Select here to Filter Data from table :
-            </p>
-                    <div class="dropdown ml-3 pt-2">
-                        <button type="button" class="bg-transparent dropdown-toggle" data-toggle="dropdown">
-                            {statusSelected}
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            {data_array.map((item)=>{
-                                return(
-                                    <li className="ml-4" onClick={(e) => handleChange(e, item)}><p className="mb-0">{item}</p></li>
-                                )
-                            })}
-                        </ul>
-                    </div>
-                </div>
+
+                </table>
+                <button className="bg-transparent mt-5" onClick={(e)=>this.handleClick("new",)}>Add new User</button>
             </div>
-            <table className="w-100" >
-                <tr>
-                    <th className="Apps">S/NO</th>
-                    <th className="Apps">project_id</th>
-                    <th className="Apps">project_code</th>
-                    <th className="Apps">description</th>
-                    <th className="Apps">start_date</th>
-                    <th className="Apps">end_date</th>
-                    <th className="Apps">company_name</th>
-                    <th className="Apps">status</th>
-                </tr>
-                {datalength > 0 ?
-                    filterstate.map((item, index) => {
-                        return (
-                            <tr  >
-                                <td className="Apps">{index + 1}</td>
-                                <td className="Apps">{item.project_id}</td>
-                                <td className="Apps">{item.project_code}</td>
-                                <td className="Apps">{item.description}</td>
-                                <td className="Apps">{item.start_date}</td>
-                                <td className="Apps">{item.end_date}</td>
-                                <td className="Apps">{item.company_name}</td>
-                                <td className="Apps">{item.status}</td>
-                            </tr>
-                        )
-                    }) : <></>}
-            </table>
-        </div>
-    );
+        );
+    }
 }
 
-const mapStateToProps = ({ Reducers }) => {
+
+const mapStateToProps = (Reducers) => {
     return {
         Reducers
     }
